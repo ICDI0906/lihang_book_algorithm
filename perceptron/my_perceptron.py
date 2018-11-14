@@ -37,7 +37,7 @@ class Perceptron(object):
         self.w = np.zeros(self.data.shape[1])
         self.b = 0
         for iterator_i in range(self.iterator_num):
-            for i,xi in enumerate(self.data):
+            for i,xi in enumerate(self.data): # 我并不是随机选择一个，而是对所有的都进行处理一遍
                 if self.label[i] * (np.dot(self.w,np.transpose(xi)) + self.b) <= 0: # mistake point
                     self.w += self.learning_rate * self.label[i] * xi
                     self.b += self.learning_rate * self.label[i]
