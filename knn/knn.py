@@ -35,7 +35,7 @@ def Predict(testset,trainset,train_labels):
 
     for test_vec in testset:
         # 输出当前运行的测试用例坐标，用于测试
-        print count
+        print (count)
         count += 1
 
         knn_list = []       # 当前k个最近邻居
@@ -93,7 +93,7 @@ k = 10
 
 if __name__ == '__main__':
 
-    print 'Start read data'
+    print ('Start read data')
 
     time_1 = time.time()
 
@@ -111,17 +111,17 @@ if __name__ == '__main__':
     # print train_features.shape
 
     time_2 = time.time()
-    print 'read data cost ',time_2 - time_1,' second','\n'
+    print( 'read data cost ',time_2 - time_1,' second','\n')
 
-    print 'Start training'
-    print 'knn do not need to train'
+    print ('Start training')
+    print ('knn do not need to train')
     time_3 = time.time()
-    print 'training cost ',time_3 - time_2,' second','\n'
+    print ('training cost ',time_3 - time_2,' second','\n')
 
-    print 'Start predicting'
+    print ('Start predicting')
     test_predict = Predict(test_features,train_features,train_labels)
     time_4 = time.time()
-    print 'predicting cost ',time_4 - time_3,' second','\n'
+    print ('predicting cost ',time_4 - time_3,' second','\n')
 
     score = accuracy_score(test_labels,test_predict)
-    print "The accruacy socre is ", score
+    print("The accruacy socre is ", score)
