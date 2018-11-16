@@ -36,7 +36,7 @@ class SVM(object):
         self.n = len(features[0])
         self.N = len(features)
         self.alpha = [0.0] * self.N
-        self.E = [self._E_(i) for i in xrange(self.N)]
+        self.E = [self._E_(i) for i in range(self.N)]
 
         self.C = 1000
         self.Max_Interation = 5000
@@ -52,7 +52,7 @@ class SVM(object):
             return abs(ygx-1) < self.epsilon
 
     def is_stop(self):
-        for i in xrange(self.N):
+        for i in range(self.N):
             satisfy = self._satisfy_KKT(i)
 
             if not satisfy:
@@ -63,7 +63,7 @@ class SVM(object):
         '''
         按照书上7.4.2选择两个变量
         '''
-        index_list = [i for i in xrange(self.N)]
+        index_list = [i for i in range(self.N)]
 
         i1_list_1 = filter(lambda i: self.alpha[i] > 0 and self.alpha[i] < self.C, index_list)
         i1_list_2 = list(set(index_list) - set(i1_list_1))
@@ -94,13 +94,13 @@ class SVM(object):
         '''
 
         if self.kernel == 'linear':
-            return sum([x1[k] * x2[k] for k in xrange(self.n)])
+            return sum([x1[k] * x2[k] for k in range(self.n)])
         if self.kernel == 'poly':
-            return (sum([x1[k] * x2[k] for k in xrange(self.n)])+1)**3
+            return (sum([x1[k] * x2[k] for k in range(self.n)])+1)**3
 
 
 
-        print '没有定义核函数'
+        print('没有定义核函数')
         return 0
 
     def _g_(self, i):
@@ -109,7 +109,7 @@ class SVM(object):
         '''
         result = self.b
 
-        for j in xrange(self.N):
+        for j in range(self.N):
             result += self.alpha[j] * self.Y[j] * self._K_(self.X[i], self.X[j])
 
         return result
@@ -122,7 +122,7 @@ class SVM(object):
 
     def try_E(self,i):
         result = self.b-self.Y[i]
-        for j in xrange(self.N):
+        for j in range(self.N):
             if self.alpha[j]<0 or self.alpha[j]>self.C:
                 continue
             result += self.Y[j]*self.alpha[j]*self._K_(self.X[i],self.X[j])
@@ -133,7 +133,7 @@ class SVM(object):
 
         self._init_parameters(features, labels)
 
-        for times in xrange(self.Max_Interation):
+        for times in range(self.Max_Interation):
             # if self.is_stop():
             #     return
 
@@ -190,7 +190,7 @@ class SVM(object):
     def _predict_(self,feature):
         result = self.b
 
-        for i in xrange(self.N):
+        for i in range(self.N):
             result += self.alpha[i]*self.Y[i]*self._K_(feature,self.X[i])
 
         if result > 0:
@@ -210,7 +210,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
-    print 'Start read data'
+    print ('Start read data')
 
     time_1 = time.time()
 
@@ -218,20 +218,20 @@ if __name__ == "__main__":
     train_features, train_labels, test_features, test_labels = generate_dataset(2000,visualization=False)
 
     time_2 = time.time()
-    print 'read data cost ',time_2 - time_1,' second','\n'
+    print ('read data cost ',time_2 - time_1,' second','\n')
 
-    print 'Start training'
+    print ('Start training')
     svm = SVM()
     svm.train(train_features, train_labels)
 
     time_3 = time.time()
-    print 'training cost ',time_3 - time_2,' second','\n'
+    print ('training cost ',time_3 - time_2,' second','\n')
 
-    print 'Start predicting'
+    print ('Start predicting')
     test_predict = svm.predict(test_features)
     time_4 = time.time()
-    print 'predicting cost ',time_4 - time_3,' second','\n'
+    print ('predicting cost ',time_4 - time_3,' second','\n')
 
     score = accuracy_score(test_labels,test_predict)
-    print "svm1 the accruacy socre is ", score
+    print ("svm1 the accruacy socre is ", score)
 

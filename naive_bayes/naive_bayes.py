@@ -12,8 +12,10 @@ from sklearn.metrics import accuracy_score
 # 二值化
 def binaryzation(img):
     cv_img = img.astype(np.uint8)
-    cv2.threshold(cv_img,50,1,cv2.cv.CV_THRESH_BINARY_INV,cv_img)
+    # print(cv_img)
+    _,cv_img = cv2.threshold(cv_img,50,1,cv2.THRESH_BINARY_INV)
     return cv_img
+
 
 def Train(trainset,train_labels):
     prior_probability = np.zeros(class_num)                         # 先验概率
@@ -22,6 +24,7 @@ def Train(trainset,train_labels):
     # 计算先验概率及条件概率
     for i in range(len(train_labels)):
         img = binaryzation(trainset[i])     # 图片二值化
+        # print('-------------')
         label = train_labels[i]
 
         prior_probability[label] += 1
@@ -83,7 +86,7 @@ feature_len = 784
 
 if __name__ == '__main__':
 
-    print 'Start read data'
+    print ('Start read data')
 
     time_1 = time.time()
 
@@ -99,17 +102,18 @@ if __name__ == '__main__':
     # print train_features.shape
 
     time_2 = time.time()
-    print 'read data cost ',time_2 - time_1,' second','\n'
+    print ('read data cost ',time_2 - time_1,' second','\n')
 
-    print 'Start training'
+    print ('Start training')
     prior_probability,conditional_probability = Train(train_features,train_labels)
     time_3 = time.time()
-    print 'training cost ',time_3 - time_2,' second','\n'
+    print ('training cost ',time_3 - time_2,' second','\n')
 
-    print 'Start predicting'
+    print ('Start predicting')
     test_predict = Predict(test_features,prior_probability,conditional_probability)
     time_4 = time.time()
-    print 'predicting cost ',time_4 - time_3,' second','\n'
+    print ('predicting cost ',time_4 - time_3,' second','\n')
 
     score = accuracy_score(test_labels,test_predict)
-    print "The accruacy socre is ", score
+    print ("The accruacy socre is ", score)
+    # The accruacy socre is  0.8336940836940837
