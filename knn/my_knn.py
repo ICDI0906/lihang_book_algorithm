@@ -67,6 +67,11 @@ class KNN(object):
             if not root.left is None:
                 self._predict(root.left)
             if abs(root.data[root.dim] - self.test_data[root.dim]) < self.predict_dist:  # intersect with the dim
+                # judge with the root
+                if self.predict_dist > self.dist(root.data):
+                    self.predict_dist = self.dist(root.data)
+                    self.predict_label = root.label
+
                 if not root.right is None:
                     self._predict(root.right)
 
@@ -74,6 +79,10 @@ class KNN(object):
             if not root.right is None:
                 self._predict(root.right)
             if abs(root.data[root.dim] - self.test_data[root.dim]) < self.predict_dist:
+                # judge with the root
+                if self.predict_dist > self.dist(root.data):
+                    self.predict_dist = self.dist(root.data)
+                    self.predict_label = root.label
                 if not root.left is None:
                     self._predict(root.left)
         else:

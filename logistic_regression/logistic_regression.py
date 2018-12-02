@@ -18,10 +18,10 @@ class LogisticRegression(object):
 
     def __init__(self):
         self.learning_step = 0.00001
-        self.max_iteration = 5000
+        self.max_iteration = 10
 
     def predict_(self,x):
-        wx = sum([self.w[j] * x[j] for j in xrange(len(self.w))])
+        wx = sum([self.w[j] * x[j] for j in range(len(self.w))])
         exp_wx = math.exp(wx)
 
         predict1 = exp_wx / (1 + exp_wx)
@@ -55,10 +55,10 @@ class LogisticRegression(object):
             time += 1
             correct_count = 0
 
-            wx = sum([self.w[i] * x[i] for i in xrange(len(self.w))])
+            wx = sum([self.w[i] * x[i] for i in range(len(self.w))])
             exp_wx = math.exp(wx)
 
-            for i in xrange(len(self.w)):
+            for i in range(len(self.w)):
                 self.w[i] -= self.learning_step * \
                     (-y * x[i] + float(x[i] * exp_wx) / float(1 + exp_wx))
 
@@ -74,7 +74,7 @@ class LogisticRegression(object):
         return labels
 
 if __name__ == "__main__":
-    print 'Start read data'
+    print ('Start read data')
 
     time_1 = time.time()
 
@@ -89,19 +89,20 @@ if __name__ == "__main__":
     train_features, test_features, train_labels, test_labels = train_test_split(imgs, labels, test_size=0.33, random_state=23323)
 
     time_2 = time.time()
-    print 'read data cost ',time_2 - time_1,' second','\n'
+    print ('read data cost ',time_2 - time_1,' second','\n')
 
-    print 'Start training'
+    print ('Start training')
     lr = LogisticRegression()
     lr.train(train_features, train_labels)
 
     time_3 = time.time()
-    print 'training cost ',time_3 - time_2,' second','\n'
+    print ('training cost ',time_3 - time_2,' second','\n')
 
-    print 'Start predicting'
+    print ('Start predicting')
     test_predict = lr.predict(test_features)
     time_4 = time.time()
-    print 'predicting cost ',time_4 - time_3,' second','\n'
+    print ('predicting cost ',time_4 - time_3,' second','\n')
 
     score = accuracy_score(test_labels,test_predict)
-    print "The accruacy socre is ", score
+    print ("The accruacy socre is ", score)
+    # The accruacy socre is  0.8974747474747474

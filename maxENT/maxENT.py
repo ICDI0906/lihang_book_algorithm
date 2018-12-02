@@ -47,7 +47,7 @@ class MaxEnt(object):
         self.Pxy = defaultdict(int)
         self.Px = defaultdict(int)
 
-        for i in xrange(len(X)):
+        for i in range(len(X)):
             x_, y = X[i], Y[i]
             self.Y_.add(y)
 
@@ -60,9 +60,10 @@ class MaxEnt(object):
         计算书中82页最下面那个期望
         '''
         self.EPxy = defaultdict(float)
-        for id in xrange(self.n):
+        for id in range(self.n):
             (x, y) = self.id2xy[id]
-            self.EPxy[id] = float(self.Pxy[(x, y)]) / float(self.N)
+            self.EPxy[id] = float(self.Pxy[(x, y)]) / float(sum(self.Pxy.values())) # 这个地改约是
+        # print(' ---- ',sum(self.EPxy.values()))
 
     def cal_pyx(self, X, y):
         result = 0.0
@@ -84,7 +85,7 @@ class MaxEnt(object):
         '''
         计算书83页最上面那个期望
         '''
-        self.EPx = [0.0 for i in xrange(self.n)]
+        self.EPx = [0.0 for i in range(self.n)]
 
         for i, X in enumerate(self.X_):
             Pyxs = self.cal_probality(X)
@@ -103,20 +104,20 @@ class MaxEnt(object):
         self.init_params(X, Y)
         self.w = [0.0 for i in range(self.n)]
 
-        max_iteration = 1000
-        for times in xrange(max_iteration):
-            print 'iterater times %d' % times
+        max_iteration = 10
+        for times in range(max_iteration):
+            print ('iterater times %d' % times)
             sigmas = []
             self.cal_EPx()
 
-            for i in xrange(self.n):
+            for i in range(self.n):
                 sigma = 1 / self.M * math.log(self.EPxy[i] / self.EPx[i])
                 sigmas.append(sigma)
 
             # if len(filter(lambda x: abs(x) >= 0.01, sigmas)) == 0:
             #     break
 
-            self.w = [self.w[i] + sigmas[i] for i in xrange(self.n)]
+            self.w = [self.w[i] + sigmas[i] for i in range(self.n)]
 
     def predict(self, testset):
         results = []
@@ -142,11 +143,11 @@ def rebuild_features(features):
 
 if __name__ == "__main__":
 
-    print 'Start read data'
+    print ('Start read data')
 
     time_1 = time.time()
 
-    raw_data = pd.read_csv('../data/train_binary.csv', header=0)
+    raw_data = pd.read_csv('../data/mini_train_binary.csv', header=0)
     data = raw_data.values
 
     imgs = data[0::, 1::]
@@ -155,24 +156,25 @@ if __name__ == "__main__":
     # 选取 2/3 数据作为训练集， 1/3 数据作为测试集
     train_features, test_features, train_labels, test_labels = train_test_split(
         imgs, labels, test_size=0.33, random_state=23323)
-
+    print(train_features.shape)
     train_features = rebuild_features(train_features)
+
     test_features = rebuild_features(test_features)
 
     time_2 = time.time()
-    print 'read data cost ', time_2 - time_1, ' second', '\n'
+    print ('read data cost ', time_2 - time_1, ' second', '\n')
 
-    print 'Start training'
+    print ('Start training')
     met = MaxEnt()
     met.train(train_features, train_labels)
 
     time_3 = time.time()
-    print 'training cost ', time_3 - time_2, ' second', '\n'
+    print ('training cost ', time_3 - time_2, ' second', '\n')
 
-    print 'Start predicting'
+    print ('Start predicting')
     test_predict = met.predict(test_features)
     time_4 = time.time()
-    print 'predicting cost ', time_4 - time_3, ' second', '\n'
+    print ('predicting cost ', time_4 - time_3, ' second', '\n')
 
     score = accuracy_score(test_labels, test_predict)
-    print "The accruacy socre is ", score
+    print ('The accruacy socre is ', score)
